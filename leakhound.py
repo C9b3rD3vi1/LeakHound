@@ -105,7 +105,7 @@ def main():
     except KeyboardInterrupt:
         print(f"\n{Fore.RED}[!] Scan interrupted by user. Exiting...{Style.RESET_ALL}")
         sys.exit(1)
-
+        
   
 if __name__ == "__main__":
     banner()
