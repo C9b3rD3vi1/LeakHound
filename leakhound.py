@@ -68,7 +68,6 @@ def check_file(base_url, file):
         return f"[-] Error checking {full_url}: {e}"
     
 
-
 # function to check if a file exists on the server
 def scan_target(base_url, max_threads=10):
     print(f"{Fore.BLUE}[+] Scanning {base_url} with {max_threads} threads...{Style.RESET_ALL}")
@@ -105,7 +104,7 @@ def main():
     except KeyboardInterrupt:
         print(f"\n{Fore.RED}[!] Scan interrupted by user. Exiting...{Style.RESET_ALL}")
         sys.exit(1)
-        
+
   
 if __name__ == "__main__":
     banner()
