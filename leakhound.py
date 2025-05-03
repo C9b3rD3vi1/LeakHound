@@ -2,10 +2,11 @@ import requests
 from urllib.parse import urljoin
 from colorama import Fore, Style
 from colorama import init
-init(autoreset=True)
 import sys
 import time
 
+init(autoreset=True)
+# LeakHound - File Leak Finder
 
 # Common backup files and extensions and sensitive files 
 common_files = [
