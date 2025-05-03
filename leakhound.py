@@ -1,13 +1,18 @@
 import requests
 from urllib.parse import urljoin
+from colorama import Fore, Style
+from colorama import init
+init(autoreset=True)
 import sys
-import os
 import time
 
 
 # Common backup files and extensions and sensitive files 
 common_files = [
-    "config.php", "config.inc.php", "config.json", "config.yaml", "config.yml",
+    "config.php", "config.inc.php", "config.json", "config.yaml", "config.yml","wp-db.php", "wp-config.php",
+    "wp-config.inc.php", "wp-config.json", "wp-config.yaml", "wp-config.yml", "wp-settings.php",
+    "wp-settings.inc.php", "wp-settings.json", "wp-settings.yaml", "wp-settings.yml", "wp-config-sample.php",
+    "wp-config-sample.inc.php", "wp-config-sample.json", "wp-config-sample.yaml", "wp-config-sample.yml",
     "config.xml", "wp-config.php", "web.config", "db.php", "db.inc.php",
     "db.json", "db.yaml", "db.yml", "db.xml", "settings.php", "settings.inc.php", "admin.bak", "admin.old",
     "admin.php.bak", "admin.php.old", "admin.php~", "admin.php.save", "admin.php.swp",
@@ -24,56 +29,88 @@ common_files = [
 
 ]
 
+# banner
+def banner():
+    print(f"""{Fore.CYAN}
+  __          __        _    _                 _ 
+  \ \        / /       | |  | |               | |
+   \ \  /\  / /__  _ __| | _| | ___   ___ __ _| |
+    \ \/  \/ / _ \| '__| |/ / |/ _ \ / __/ _` | |
+     \  /\  / (_) | |  |   <| | (_) | (_| (_| | |
+      \/  \/ \___/|_|  |_|\_\_|\___/ \___\__,_|_|
+                       LeakHound - File Leak Finder
+                     Author: C9b3rD3vi1
+    {Style.RESET_ALL}""")
 
 
 # function to check if a file exists on the server
-def scan_target(base_url, file):
+def scan_target(base_url):
 
-    print(f"[+] Scanning ...")
-
-    print(f"[-] Checking {file}...")
+    print(f"{Fore.BLUE}[+] Scanning ... {Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}[-] Scanning {base_url} for common files...{Style.RESET_ALL}")
 
     # Construct the full URL
     if not base_url.endswith('/'):
         base_url += '/'
 
     for file in common_files:
+        # Construct the full URL
         full_url = urljoin(base_url, file)
+
         print(f"[-] Checking {full_url}...")
         # Check if the file exists
         try:
             # Send a HEAD request to check if the file exists
             response = requests.head(full_url, allow_redirects=True, timeout=5)
             if response.status_code == 200:
-                print(f"[+] Found: {full_url}")
+                print(f"{Fore.GREEN}[+] Found: {full_url} (200 OK) Exist {Style.RESET_ALL}")
                 # forbidden files
             elif response.status_code == 403:
-                print(f"[+] Found: {full_url} (403 Forbidden)")
+                 print(f"{Fore.LIGHTYELLOW_EX}[+] Found (403 Forbidden): {full_url}{Style.RESET_ALL}")
                 # not found files
             elif response.status_code == 404:
-                print(f"[-] Not Found: {full_url} (404 Not Found)")
+                print(f"[-] Not Found: {full_url} {Fore.LIGHTRED_EX}(404 Not Found){Style.RESET_ALL}")
+                # other status codes
+            else:
+                print(f"[?] {full_url} returned status code {response.status_code}")
 
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
+            # Handle any request exceptions
             print(f"[-] Error checking {full_url}: {e}")
             continue
+        except KeyboardInterrupt:
+            print(f"\n{Fore.RED}[!] User interrupted the scan.{Style.RESET_ALL}")
+            print(f"{Fore.RED}[-] Exiting...{Style.RESET_ALL}")
+            sys.exit(1)
+        except Exception as e:
+            # Handle any other exceptions
+            print(f"[-] An error occurred: {e}")
+            continue
+        # Sleep for a short duration to avoid overwhelming the server
+        time.sleep(1.5)
+    # Print a message indicating the scan is complete
     print(f"[+] Finished scanning {base_url} for common files.")
-
 
 
 
 # Main function to run the script
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python leakhound.py <url>")
+        print("Usage: python3 leakhound.py <url>")
         sys.exit(1)
 
     base_url = sys.argv[1]
 
     # Check if the URL starts with http:// or https://
     if not base_url.startswith("http://") and not base_url.startswith("https://"):
-        print("[-] Invalid URL. Please provide a valid URL starting with http:// or https://")
+        print(f"{Fore.RED}[-] Invalid URL. Please provide a valid URL starting with http:// or https://{Style.RESET_ALL}")
+
         sys.exit(1)
 
     # Call the check_file function
-    scan_target(base_url, common_files)
-    
+    scan_target(base_url)
+
+  
+if __name__ == "__main__":
+    banner()
+    main()
