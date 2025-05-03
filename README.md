@@ -59,17 +59,17 @@ The list is customizable via the common_files array.
 
 
 🧩 To Do
- Add multithreading
 
- Proxy support
+    Proxy support
 
- Random User-Agent rotation
+    Random User-Agent rotation
 
- Save results to file
+    Save results to file
 
 
 ⚠️ Legal Disclaimer
 This tool is intended for educational purposes and authorized testing only. Unauthorized scanning of systems you do not own or have permission to test is illegal and unethical.
+
 
 📃 License
 MIT License

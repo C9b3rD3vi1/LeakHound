@@ -33,18 +33,20 @@ common_files = [
 
 ]
 
-# banner
 def banner():
-    print(f"""{Fore.CYAN}
-  __          __        _    _                 _ 
-  \ \        / /       | |  | |               | |
-   \ \  /\  / /__  _ __| | _| | ___   ___ __ _| |
-    \ \/  \/ / _ \| '__| |/ / |/ _ \ / __/ _` | |
-     \  /\  / (_) | |  |   <| | (_) | (_| (_| | |
-      \/  \/ \___/|_|  |_|\_\_|\___/ \___\__,_|_|
-                       LeakHound - File Leak Finder
-                     Author: C9b3rD3vi1
-    {Style.RESET_ALL}""")
+    print(f"""{Fore.LIGHTBLUE_EX}
+   __      __              _   _                       _           
+   \ \    / /             | | | |                     | |          
+    \ \  / /__  _ __   ___| |_| |__   ___  _ __   __ _| | ___  ___ 
+     \ \/ / _ \| '_ \ / __| __| '_ \ / _ \| '_ \ / _` | |/ _ \/ __|
+      \  / (_) | | | | (__| |_| | | | (_) | | | | (_| | |  __/\__ \\
+       \/ \___/|_| |_|\___|\__|_| |_|\___/|_| |_|\__, |_|\___||___/
+                                                  __/ |            
+                                                 |___/             
+
+        {Fore.CYAN}LeakHound — The Sensitive File Sniffer 🐾
+        {Fore.YELLOW}Author: C9b3rD3vi1
+        {Style.RESET_ALL}""")
 
 
 # function to check if a file exists on the server
@@ -58,7 +60,7 @@ def check_file(base_url, file):
         elif response.status_code == 403:
             return f"{Fore.YELLOW}[+] Found: {full_url} (403 Forbidden){Style.RESET_ALL}"
         elif response.status_code == 404:
-            return f"{Fore.LIGHTRED_EX}[-] Not Found: {full_url} (404 Not Found){Style.RESET_ALL}"
+            return f"[-] Not Found: {full_url} {Fore.LIGHTRED_EX}(404 Not Found){Style.RESET_ALL}"
         else:
             return f"[?] {full_url} returned status code {response.status_code}"
 
