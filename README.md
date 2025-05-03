@@ -83,7 +83,7 @@ Always obtain permission before using LeakHound on any system.
 
 C9b3rD3vi1
 
-Twitter: <https://x.com/@C9b3rD3vi1_>
+Twitter: <https://x.com/C9b3rD3vi1_>
 
 GitHub: <https://github.com/C9b3rD3vi1>
 
