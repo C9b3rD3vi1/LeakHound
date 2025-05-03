@@ -7,62 +7,27 @@ import time
 
 # Common backup files and extensions and sensitive files 
 common_files = [
-    ".env",
-    ".git/config",
-    ".git/HEAD",
-    ".git/objects",
-    ".git/refs",
-    ".gitignore",
-    ".htaccess",
-    ".htpasswd",
-    ".idea/",
-    ".svn/",
-    ".DS_Store",
-    "wp-config.php",
-    "config.php",
-    "config.inc.php",
-    "config.yaml",
-    "config.yml",
-    "config.json",
-    "settings.py",
-    "settings.json",
-    "settings.yml",
-    "settings.ini",
-    "settings.xml",
-    "web.config",
-    "appsettings.json",
-    "appsettings.yml",
-    "appsettings.xml",
-    "appsettings.ini",
-    "appsettings.php",
-    "appsettings.config",
-    "appsettings.py",
-    "appsettings.properties",
-    "appsettings.rb",
-    "appsettings.yaml",
-    "appsettings.env",
-    "appsettings.env.example",
-    #backup files
-    "backup.zip",
-    "backup.tar.gz",
-    "backup.tar.bz2",
-    "backup.tar.xz",
-    "backup.tar",
-    "backup.tgz",
-    "backup.tgz.bz2",
-    "backup.tgz.xz",
-    "backup.tgz.z",
-    # PHP sensitive files
-    "php.ini",
-    "phpinfo.php",
-    "phpmyadmin/config.inc.php",
-    "phpmyadmin/config.php",
-    "phpmyadmin/config.inc.php.bak",
+    "config.php", "config.inc.php", "config.json", "config.yaml", "config.yml",
+    "config.xml", "wp-config.php", "web.config", "db.php", "db.inc.php",
+    "db.json", "db.yaml", "db.yml", "db.xml", "settings.php", "settings.inc.php", "admin.bak", "admin.old",
+    "admin.php.bak", "admin.php.old", "admin.php~", "admin.php.save", "admin.php.swp",
+    "admin.php.save~", "admin.php.swp~", "admin.php.save1", "admin.php.save2", "admin.php.save3",
+    "admin.php.save4", "admin.php.save5", "admin.php.save6", "admin.php.save7", "admin.php.save8",
+    "admin.php.save9", "admin.php.save10", "admin.php.save11", "admin.php.save12", "admin.php.save13", "git/config", ".git/HEAD", "credentials.json",
+    "credentials.yaml", "credentials.yml", "credentials.xml", "credentials.php", "credentials.inc.php",
+    "credentials.txt", "credentials.bak", "credentials.old", "credentials.php.bak", "credentials.php.old",
+    "credentials.php~", "credentials.php.save", "credentials.php.swp", "credentials.php.save~",
+    "credentials.php.swp~", "credentials.php.save1", "credentials.php.save2", "credentials.php.save3","passwd", "passwd.bak", "passwd.old", "passwd.php", "passwd.inc.php",
+    "passwd.json", "passwd.yaml", "passwd.yml", "passwd.xml", "passwd.txt", "passwd.bak", "passwd.old",
+    "passwd.php.bak", "passwd.php.old", "passwd.php~", "passwd.php.save", "passwd.php.swp",
+    "passwd.php.save~", "passwd.php.swp~", "passwd.php.save1", "passwd.php.save2", "passwd.php.save3",
 
 ]
 
+
+
 # function to check if a file exists on the server
-def check_file(base_url, file):
+def scan_target(base_url, file):
 
     print(f"[+] Scanning ...")
 
@@ -110,5 +75,5 @@ def main():
         sys.exit(1)
 
     # Call the check_file function
-    check_file(base_url, common_files)
+    scan_target(base_url, common_files)
     
