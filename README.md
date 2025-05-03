@@ -1,18 +1,29 @@
-# 🐾 LeakHound
+# 🐾 LeakHound — Sensitive File Sniffer
 
-**LeakHound** is a lightweight Python-based reconnaissance tool that scans web servers for **sensitive or misconfigured files** such as backup configs, credential files, database dumps, and more. It’s useful for **pentesters**, **bug bounty hunters**, and **security researchers**.
+**LeakHound** is a Python-based security reconnaissance tool designed to sniff out commonly exposed or misconfigured sensitive files on web servers. It automates the detection of configuration files, credentials, backups, and other potential leaks that attackers commonly exploit.
 
-![LeakHound](./leakhound.png)
+---
+![LeakHound - File Leak Finder](./leakhound.png)
 
-## 🚀 Features
 
-- 🔍 Scans for over 100+ common sensitive file paths
-- 🎨 Colored output using `colorama`
-- 🌐 Supports HTTP/HTTPS
-- ⏱ Graceful handling of errors and user interruptions
-- 💤 Throttled requests to avoid overwhelming the server
+## 🔍 Features
 
-## 🛠️ Installation
+- Scans for **hundreds of known sensitive and backup file names**
+- Supports **multithreaded scanning** for faster execution
+- Clear and colorful CLI output using **Colorama**
+- Customizable and extensible file list
+- Gracefully handles errors, timeouts, and interruptions
+
+---
+
+## ⚙️ Installation
+
+    git clone https://github.com/C9b3rD3vi1/LeakHound.git
+
+    cd leakhound
+
+    pip install -r requirements.txt
+
 
 ### 📦 Requirements
 
@@ -27,54 +38,58 @@ Or install manually:
 
     pip install requests colorama
 
-⚙️ Usage
+## 🚀 Usage
 
-    python3 leakhound.py <URL>
+    python3 leakhound.py <url> [threads]
 
-Example:
+<url>: Target base URL (must start with http:// or https://)
 
-    python3 leakhound.py https://example.com
+[threads]: Optional. Number of concurrent threads to use (default: 10)
 
-LeakHound will then scan the provided domain for known sensitive files and backups.
+Example
 
-📂 Files Detected
-
-LeakHound checks for:
-
-        wp-config.php, config.json, db.yaml, etc.
-
-        .git/HEAD, .env, credentials.txt
-
-        admin.php.bak, passwd.old, and many more
-
-The list is customizable via the common_files array.
-
-🧠 Example Output
-
-    [+] Scanning ...
-    [-] Scanning https://example.com for common files...
-    [-] Checking https://example.com/wp-config.php...
-    [+] Found: https://example.com/wp-config.php (200 OK) Exist
-    [-] Not Found: https://example.com/db.json (404 Not Found)
+    python3 leakhound.py https://example.com 20
 
 
-🧩 To Do
+## 🧠 How It Works
 
-    Proxy support
+LeakHound iterates through a large list of common file paths and uses HEAD requests to check if those files exist on the target server. If a file is found (status 200 or 403), it's flagged as potentially sensitive.
 
-    Random User-Agent rotation
+![ LeakHound - File Leak Finder](./leakhound.png)
 
-    Save results to file
-
-
-⚠️ Legal Disclaimer
-This tool is intended for educational purposes and authorized testing only. Unauthorized scanning of systems you do not own or have permission to test is illegal and unethical.
+The scan runs concurrently using Python's ThreadPoolExecutor, speeding up the process while avoiding server overload.
 
 
-📃 License
-MIT License
+## 📂 Sample Files Scanned
 
-🙋‍♂️ Author
-LeakHound by C9b3rD3vi1
+    config.php, wp-config.php, .git/HEAD, credentials.json
 
-Feel free to contribute or suggest improvements!
+    admin.php.bak, passwd.old, db.yaml
+
+... and many more
+
+You can customize the list in common_files inside the script.
+
+
+## 🛑 Disclaimer
+
+This tool is intended only for authorized security testing and educational purposes. Unauthorized scanning of websites is illegal and unethical.
+
+Always obtain permission before using LeakHound on any system.
+
+
+## 👨‍💻 Author
+
+C9b3rD3vi1
+
+Twitter: @C9b3rD3vi1_
+
+GitHub: github.com/C9b3rD3vi1
+
+Website: <https://cyberlocktech.com>
+
+
+## 📄 License
+
+This project is licensed under the MIT License.  
+See the [LICENSE](LICENSE) file for details.
