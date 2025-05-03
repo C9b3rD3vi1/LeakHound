@@ -2,6 +2,7 @@
 
 **LeakHound** is a lightweight Python-based reconnaissance tool that scans web servers for **sensitive or misconfigured files** such as backup configs, credential files, database dumps, and more. It’s useful for **pentesters**, **bug bounty hunters**, and **security researchers**.
 
+![LeakHound](./leakhound.png)
 
 ## 🚀 Features
 
