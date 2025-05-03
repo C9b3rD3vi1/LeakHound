@@ -1,12 +1,15 @@
+import sys
+import time
 import requests
 from urllib.parse import urljoin
 from colorama import Fore, Style
 from colorama import init
-import sys
-import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 
 init(autoreset=True)
 # LeakHound - File Leak Finder
+
 
 # Common backup files and extensions and sensitive files 
 common_files = [
@@ -45,53 +48,40 @@ def banner():
 
 
 # function to check if a file exists on the server
-def scan_target(base_url):
+def check_file(base_url, file):
+    full_url = urljoin(base_url, file)
+    try:
+        response = requests.head(full_url, allow_redirects=True, timeout=5)
 
-    print(f"{Fore.BLUE}[+] Scanning ... {Style.RESET_ALL}")
-    print(f"{Fore.YELLOW}[-] Scanning {base_url} for common files...{Style.RESET_ALL}")
+        if response.status_code == 200:
+            return f"{Fore.GREEN}[+] Found: {full_url} (200 OK) Exist {Style.RESET_ALL}"
+        elif response.status_code == 403:
+            return f"{Fore.YELLOW}[+] Found: {full_url} (403 Forbidden){Style.RESET_ALL}"
+        elif response.status_code == 404:
+            return f"{Fore.LIGHTRED_EX}[-] Not Found: {full_url} (404 Not Found){Style.RESET_ALL}"
+        else:
+            return f"[?] {full_url} returned status code {response.status_code}"
 
-    # Construct the full URL
+    except requests.exceptions.RequestException as e:
+        return f"[-] Error checking {full_url}: {e}"
+    
+
+
+# function to check if a file exists on the server
+def scan_target(base_url, max_threads=10):
+    print(f"{Fore.BLUE}[+] Scanning {base_url} with {max_threads} threads...{Style.RESET_ALL}")
+
     if not base_url.endswith('/'):
         base_url += '/'
 
-    for file in common_files:
-        # Construct the full URL
-        full_url = urljoin(base_url, file)
+    with ThreadPoolExecutor(max_workers=max_threads) as executor:
+        future_to_file = {executor.submit(check_file, base_url, file): file for file in common_files}
 
-        print(f"[-] Checking {full_url}...")
-        # Check if the file exists
-        try:
-            # Send a HEAD request to check if the file exists
-            response = requests.head(full_url, allow_redirects=True, timeout=5)
-            if response.status_code == 200:
-                print(f"{Fore.GREEN}[+] Found: {full_url} (200 OK) Exist {Style.RESET_ALL}")
-                # forbidden files
-            elif response.status_code == 403:
-                 print(f"{Fore.LIGHTYELLOW_EX}[+] Found (403 Forbidden): {full_url}{Style.RESET_ALL}")
-                # not found files
-            elif response.status_code == 404:
-                print(f"[-] Not Found: {full_url} {Fore.LIGHTRED_EX}(404 Not Found){Style.RESET_ALL}")
-                # other status codes
-            else:
-                print(f"[?] {full_url} returned status code {response.status_code}")
+        for future in as_completed(future_to_file):
+            result = future.result()
+            print(result)
 
-        except requests.exceptions.RequestException as e:
-            # Handle any request exceptions
-            print(f"[-] Error checking {full_url}: {e}")
-            continue
-        except KeyboardInterrupt:
-            print(f"\n{Fore.RED}[!] User interrupted the scan.{Style.RESET_ALL}")
-            print(f"{Fore.RED}[-] Exiting...{Style.RESET_ALL}")
-            sys.exit(1)
-        except Exception as e:
-            # Handle any other exceptions
-            print(f"[-] An error occurred: {e}")
-            continue
-        # Sleep for a short duration to avoid overwhelming the server
-        time.sleep(1.5)
-    # Print a message indicating the scan is complete
-    print(f"[+] Finished scanning {base_url} for common files.")
-
+    print(f"\n{Fore.GREEN}[+] Scan complete.{Style.RESET_ALL}")
 
 
 # Main function to run the script
@@ -108,8 +98,11 @@ def main():
 
         sys.exit(1)
 
-    # Call the check_file function
-    scan_target(base_url)
+    try:
+        scan_target(base_url)
+    except KeyboardInterrupt:
+        print(f"\n{Fore.RED}[!] Scan interrupted by user. Exiting...{Style.RESET_ALL}")
+        sys.exit(1)
 
   
 if __name__ == "__main__":
