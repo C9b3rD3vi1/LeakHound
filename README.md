@@ -3,7 +3,7 @@
 **LeakHound** is a Python-based security reconnaissance tool designed to sniff out commonly exposed or misconfigured sensitive files on web servers. It automates the detection of configuration files, credentials, backups, and other potential leaks that attackers commonly exploit.
 
 ---
-![LeakHound - File Leak Finder](./leakhound.png)
+![LeakHound - File Leak Finder](./leadhound1.png)
 
 
 ## 🔍 Features
@@ -44,6 +44,7 @@ Or install manually:
 
 <url>: Target base URL (must start with http:// or https://)
 
+
 [threads]: Optional. Number of concurrent threads to use (default: 10)
 
 Example
@@ -55,7 +56,7 @@ Example
 
 LeakHound iterates through a large list of common file paths and uses HEAD requests to check if those files exist on the target server. If a file is found (status 200 or 403), it's flagged as potentially sensitive.
 
-![ LeakHound - File Leak Finder](./leakhound.png)
+![ LeakHound - File Leak Finder](./leadhound1.png)
 
 The scan runs concurrently using Python's ThreadPoolExecutor, speeding up the process while avoiding server overload.
 
@@ -84,7 +85,7 @@ C9b3rD3vi1
 
 Twitter: @C9b3rD3vi1_
 
-GitHub: github.com/C9b3rD3vi1
+GitHub: <https://github.com/C9b3rD3vi1>
 
 Website: <https://cyberlocktech.com>
 
